@@ -1,0 +1,29 @@
+curl -X POST 127.0.0.1:8080/register -d "{ \"username\": \"Bob\", \"id\": 30, \"government\": \"Cairo\", \"balance\": 10000, \"password_hash\": \"HASH:)\"}"
+curl -X POST 127.0.0.1:8080/login -d "{ \"username\": \"Bob\", \"password_hash\": \"PlainTextPassword\"}"
+curl -X POST 127.0.0.1:8080/item/add -d "{ \"name\": \"ItemName\", \"price\": 100, \"quantity\": 50, \"userid\": 30}"
+curl -X POST 127.0.0.1:8080/transaction/make \
+-H "Content-Type: application/json" \
+-d '{
+  "buyer_id": 101,
+  "buyer_government": "GovA",
+  "seller_id": 202,
+  "seller_government": "GovB",
+  "item_id": 303,
+  "item_government": "GovC",
+  "item_name": "Widget X",
+  "quantity": 10,
+  "amount": 499.99,
+  "transaction_date": "2025-04-16T12:00:00Z"
+}'
+
+
+public int id;
+    public String government;
+    public String username;
+    public String password_hash;
+    public String balanace;
+}
+public int user_id;
+    public String name;
+    public double price;
+    public int quantity;

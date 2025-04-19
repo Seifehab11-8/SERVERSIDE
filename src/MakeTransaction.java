@@ -7,12 +7,11 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.google.gson.Gson;
 
-public class addItem implements HttpHandler {
+public class MakeTransaction implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         String method = exchange.getRequestMethod();
         if("POST".equals(method)) {
-            System.out.println("requested adding item");
             BufferedReader bufferedReader = new BufferedReader(
                 new InputStreamReader(exchange.getRequestBody()));
             StringBuilder buildRequestBody = new StringBuilder();
@@ -21,10 +20,22 @@ public class addItem implements HttpHandler {
                 buildRequestBody.append(line);
             }
             String requestBody = buildRequestBody.toString();
-            Item item = new Gson().fromJson(requestBody, Item.class);
+            Transaction t = new Gson().fromJson(requestBody, Transaction.class);
             //------------debug section-------------
-            System.out.println("addItem : got \""+requestBody+"\"");
-            System.out.println(item.name+","+item.user_id+","+item.price+","+item.quantity);
+            System.out.println("MakeTransaction : got \""+requestBody+"\"");
+            System.out.print("json obj:");
+            System.out.println(
+                "buyer_id=" + t.buyer_id + ", " +
+                "buyer_government=" + t.buyer_government + ", " +
+                "seller_id=" + t.seller_id + ", " +
+                "seller_government=" + t.seller_government + ", " +
+                "item_id=" + t.item_id + ", " +
+                "item_government=" + t.item_government + ", " +
+                "item_name=" + t.item_name + ", " +
+                "quantity=" + t.quantity + ", " +
+                "amount=" + t.amount + ", " +
+                "transaction_date=" + t.transaction_date
+            );
             //------------end of debug--------------
             int errorCode = 0;
             String response = null;

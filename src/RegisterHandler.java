@@ -21,6 +21,10 @@ public class RegisterHandler implements HttpHandler {
             }
             String requestBody = buildRequestBody.toString();
             User user = new Gson().fromJson(requestBody, User.class);
+            //------------debug section-------------
+            System.out.println("RegisterHandler : got \""+requestBody+"\"");
+            System.out.println("id:"+user.id+"username:"+user.username+","+user.balanace+","+user.government+","+user.password_hash);
+            //------------end of debug--------------
             int errorCode = 0;
             String response = null;
             /*

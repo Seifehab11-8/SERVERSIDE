@@ -22,6 +22,10 @@ public class LoginHandler implements HttpHandler{
             }
             String requestBody = buildRequestBody.toString();
             User user = new Gson().fromJson(requestBody, User.class);
+            //------------debug section-------------
+            System.out.println("LoginHandler : got \""+requestBody+"\"");
+            System.out.println("username:"+user.username+",Pass:"+user.password_hash);
+            //------------end of debug--------------
             int errorCode = 0;
             String response = null;
             /*
