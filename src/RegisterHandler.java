@@ -1,7 +1,7 @@
-import java.io.InputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -22,13 +22,22 @@ public class RegisterHandler implements HttpHandler {
             String requestBody = buildRequestBody.toString();
             User user = new Gson().fromJson(requestBody, User.class);
             int errorCode = 0;
+            String response = null;
             /*
              * TODO: give the code to a function created by mohamed
              */
             exchange.getResponseHeaders().add("Content-Type", "application/json");
+            /*
+             * TODO: give the code to a function created by ahmed essam
+             */
             exchange.sendResponseHeaders(errorCode, 0);
+            OutputStream os = exchange.getResponseBody();
+            os.write(response.getBytes());
+            os.close();
         }
-        throw new UnsupportedOperationException("Unimplemented method 'handle'");
+        else{
+            throw new UnsupportedOperationException("Unimplemented method 'handle'");
+        }
     }
     
 }
