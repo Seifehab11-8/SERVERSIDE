@@ -21,6 +21,9 @@ public class Server {
         server.createContext("/api/greet", new GreetHandler());
         server.createContext("/api/echo", new EchoHandler());
         server.createContext("/dyn", new DynamicHandler());
+        server.createContext("/login", new LoginHandler());
+        server.createContext("/register", new RegisterHandler());
+        server.createContext("/item/add", new addItem());
         //server.createContext("/json", new JSONHandler());
 	server.setExecutor(null); // creates a default executor
         server.start();
