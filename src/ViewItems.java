@@ -9,55 +9,26 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.google.gson.Gson;
 
-public class EditItem implements HttpHandler {
-    @Override
+public class ViewItems implements HttpHandler {
     public void handle(HttpExchange exchange) throws IOException {
         String method = exchange.getRequestMethod();
-        if("PUT".equals(method)) {
-            System.out.println("requested editing item");
-            BufferedReader bufferedReader = new BufferedReader(
-                new InputStreamReader(exchange.getRequestBody()));
-            StringBuilder buildRequestBody = new StringBuilder();
-            String path = exchange.getRequestURI().getPath();  // Get the entire URL path
-            System.out.println(path);
+        if ("GET".equals(method)) {
             String query = exchange.getRequestURI().getQuery();
             System.out.println(query);
-            //String dynamicPart = getDynamicPart(path);
-            //System.out.println("dynamic part : "+dynamicPart); //flag
             String commaSeparated = parseQueryString(query);
-            //System.out.println("comma separated part : "+commaSeparated);
             User quriedUser = new Gson().fromJson(commaSeparated, User.class);
             System.out.println("Queried ID : "+quriedUser.id+" Queried gov : "+quriedUser.government);
-            String line = null;
-            while((line = bufferedReader.readLine()) != null) {
-                buildRequestBody.append(line);
-            }
-            String requestBody = buildRequestBody.toString();
-            Item item = new Gson().fromJson(requestBody, Item.class);
-            //------------debug section-------------
-            System.out.println("EditItem : got \""+requestBody+"\"");
-            System.out.println(item.name+","+item.user_id+","+item.price+","+item.quantity);
-            //------------end of debug--------------
-            int errorCode = 0;
-            String response = null;
-            /*
-             * TODO: give the code to a function created by mohamed
-             */
-            exchange.getResponseHeaders().add("Content-Type", "application/json");
-            /*
-             * TODO: give the code to a function created by ahmed essam
-             */
-            exchange.sendResponseHeaders(errorCode, 0);
+            String response = "From ashraf (Items)";
+            exchange.getResponseHeaders().set("Content-Type", "application/json");
+            exchange.sendResponseHeaders(200, response.getBytes().length);
             OutputStream os = exchange.getResponseBody();
             os.write(response.getBytes());
             os.close();
-        }
-        else{
-            throw new UnsupportedOperationException("Unimplemented method 'handle'");
+        } else {
+            exchange.sendResponseHeaders(405, -1); // Method Not Allowed
         }
     }
-
-        public static String parseQueryString(String query) {
+    public static String parseQueryString(String query) {
             // if (query.startsWith("?")) {
             //     query = query.substring(1);
             // }

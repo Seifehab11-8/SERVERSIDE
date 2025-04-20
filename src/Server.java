@@ -24,6 +24,11 @@ public class Server {
         server.createContext("/login", new LoginHandler());
         server.createContext("/register", new RegisterHandler());
         server.createContext("/item/add", new addItem());
+        server.createContext("/item/edit", new EditItem());
+        server.createContext("/item/remove", new RemoveItem());
+        server.createContext("/item/view", new ViewItems());
+        server.createContext("/user/view", new ViewAccountInfo());
+        server.createContext("/user/deposit", new DepositCash());
         server.createContext("/transaction/make", new MakeTransaction());
         //server.createContext("/json", new JSONHandler());
 	server.setExecutor(null); // creates a default executor

@@ -9,12 +9,12 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.google.gson.Gson;
 
-public class EditItem implements HttpHandler {
+public class RemoveItem implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         String method = exchange.getRequestMethod();
-        if("PUT".equals(method)) {
-            System.out.println("requested editing item");
+        if("DELETE".equals(method)) {
+            System.out.println("requested deleting item");
             BufferedReader bufferedReader = new BufferedReader(
                 new InputStreamReader(exchange.getRequestBody()));
             StringBuilder buildRequestBody = new StringBuilder();
@@ -26,18 +26,15 @@ public class EditItem implements HttpHandler {
             //System.out.println("dynamic part : "+dynamicPart); //flag
             String commaSeparated = parseQueryString(query);
             //System.out.println("comma separated part : "+commaSeparated);
-            User quriedUser = new Gson().fromJson(commaSeparated, User.class);
-            System.out.println("Queried ID : "+quriedUser.id+" Queried gov : "+quriedUser.government);
-            String line = null;
-            while((line = bufferedReader.readLine()) != null) {
-                buildRequestBody.append(line);
-            }
-            String requestBody = buildRequestBody.toString();
-            Item item = new Gson().fromJson(requestBody, Item.class);
-            //------------debug section-------------
-            System.out.println("EditItem : got \""+requestBody+"\"");
-            System.out.println(item.name+","+item.user_id+","+item.price+","+item.quantity);
-            //------------end of debug--------------
+            DeleteObject deleteObject = new Gson().fromJson(commaSeparated, DeleteObject.class);
+            System.out.println("Queried ID : "+deleteObject.id+" Queried gov : "+deleteObject.government);
+            User user = new User();
+            user.id = deleteObject.id;
+            user.government = deleteObject.government;
+            Item item = new Item();
+            item.name = deleteObject.itemName;
+            System.out.println("UserName : "+user.id+", UserGovernment : "+user.government+
+                ", ItemName : "+item.name);
             int errorCode = 0;
             String response = null;
             /*
@@ -95,7 +92,7 @@ public class EditItem implements HttpHandler {
         // }
         // return "";
         //String Path = "/item/add?name=alice&age=30";
-        Pattern pattern = Pattern.compile("^/item/edit\\?(.*)$");
+        Pattern pattern = Pattern.compile("^/item/remove\\?(.*)$");
         Matcher matcher = pattern.matcher(path);
 
         if (matcher.find()) {

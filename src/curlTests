@@ -1,6 +1,10 @@
 curl -X POST 127.0.0.1:8080/register -d "{ \"username\": \"Bob\", \"id\": 30, \"government\": \"Cairo\", \"balance\": 10000, \"password_hash\": \"HASH:)\"}"
 curl -X POST 127.0.0.1:8080/login -d "{ \"username\": \"Bob\", \"password_hash\": \"PlainTextPassword\"}"
 curl -X POST 127.0.0.1:8080/item/add -d "{ \"name\": \"ItemName\", \"price\": 100, \"quantity\": 50, \"userid\": 30}"
+curl -X PUT 127.0.0.1:8080/item/edit -d "{ \"name\": \"ItemName\", \"quantity\": 50}"
+curl -X DELETE '127.0.0.1:8080/item/remove?id=1&government=Cairo&itemName=bottle'
+curl -X GET '127.0.0.1:8080/item/view?id=1&government=Cairo'
+curl -X GET '127.0.0.1:8080/user/view?id=1&government=Cairo'
 curl -X POST 127.0.0.1:8080/transaction/make \
 -H "Content-Type: application/json" \
 -d '{
