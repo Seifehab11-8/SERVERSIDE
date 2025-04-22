@@ -1,0 +1,12 @@
+[mysqld]
+# Port number
+port=3308
+
+# Path to data directory (use forward slashes or double backslashes)
+datadir="C:/Users/semaz/OneDrive/Documents/Java_sw_development/SERVERSIDE/Other/data"
+
+# Location of PID file
+pid-file="C:/Users/semaz/OneDrive/Documents/Java_sw_development/SERVERSIDE/Other/data/mysql.pid"
+
+# Optional: Socket file (usually for Unix, but not required on Windows)
+# socket="C:/Users/semaz/OneDrive/Documents/Java_sw_development/SERVERSIDE/Other/data/mysql.sock"

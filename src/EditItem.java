@@ -10,6 +10,10 @@ import com.sun.net.httpserver.HttpHandler;
 import com.google.gson.Gson;
 
 public class EditItem implements HttpHandler {
+    private Database database;
+    public EditItem(Database database) {
+        this.database = database;
+    }
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         String method = exchange.getRequestMethod();
@@ -33,21 +37,37 @@ public class EditItem implements HttpHandler {
                 buildRequestBody.append(line);
             }
             String requestBody = buildRequestBody.toString();
-            Item item = new Gson().fromJson(requestBody, Item.class);
+            EditItemObject editItem = new Gson().fromJson(requestBody, EditItemObject.class);
             //------------debug section-------------
             System.out.println("EditItem : got \""+requestBody+"\"");
-            System.out.println(item.name+","+item.user_id+","+item.price+","+item.quantity);
+            System.out.println(editItem.item.name+","+editItem.item.user_id+","+editItem.newName+","+editItem.item.price+","+editItem.item.quantity);
             //------------end of debug--------------
-            int errorCode = 0;
+            int statusNumber = 400;
             String response = null;
             /*
              * TODO: give the code to a function created by mohamed
              */
+            editItem.item.price = editItem.item.price == 0? -1:editItem.item.price;
+            editItem.item.quantity = editItem.item.quantity == 0? -1:editItem.item.quantity;
+            Result result;
+            result = database.editItem(quriedUser.id, quriedUser.government, editItem.item.name, editItem.newName, 
+                editItem.item.price, editItem.item.quantity);
+
+            switch(result.getMsgNum()) {
+                case 9:
+                response = "ITEM_NOT_FOUND";
+                statusNumber = 400;
+                break;
+                case 10:
+                    response = "SUCCESS";
+                    statusNumber = 200;
+                break;
+            }
             exchange.getResponseHeaders().add("Content-Type", "application/json");
             /*
              * TODO: give the code to a function created by ahmed essam
              */
-            exchange.sendResponseHeaders(errorCode, 0);
+            exchange.sendResponseHeaders(statusNumber, response.length());
             OutputStream os = exchange.getResponseBody();
             os.write(response.getBytes());
             os.close();

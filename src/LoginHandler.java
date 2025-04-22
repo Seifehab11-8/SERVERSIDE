@@ -8,7 +8,10 @@ import com.sun.net.httpserver.HttpHandler;
 import com.google.gson.Gson;
 
 public class LoginHandler implements HttpHandler{
-
+    private Database database;
+    public LoginHandler(Database database){
+        this.database = database;
+    }
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         String method = exchange.getRequestMethod();
@@ -27,7 +30,22 @@ public class LoginHandler implements HttpHandler{
             System.out.println("username:"+user.username+",Pass:"+user.password_hash);
             //------------end of debug--------------
             int errorCode = 0;
+            int statusNumber = 400;
             String response = null;
+            Result result = database.login(user.username, user.password_hash);
+            errorCode = result.getMsgNum();
+            System.out.println("error code: "+errorCode);
+            if(errorCode == 3) {
+                response = result.getSingleString().orElse("default"); // Admin login
+                response = "{" + response + "}"; // Wrap the response in curly braces to make it a valid JSON object
+                System.out.println("response: "+response);
+                user = new Gson().fromJson(response, User.class);
+                System.out.println("user id: "+user.id+" user government: "+user.government);
+                statusNumber = 200;
+            } else if (errorCode == 4) {
+                response = "FAIL"; // Login failed
+            }
+            
             /*
              * TODO: give the code to a function created by mohamed
              */
@@ -35,7 +53,7 @@ public class LoginHandler implements HttpHandler{
             /*
              * TODO: give the code to a function created by ahmed essam
              */
-            exchange.sendResponseHeaders(errorCode, 0);
+            exchange.sendResponseHeaders(statusNumber, response.length());
             OutputStream os = exchange.getResponseBody();
             os.write(response.getBytes());
             os.close();
