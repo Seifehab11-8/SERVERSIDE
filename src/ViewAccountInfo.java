@@ -10,6 +10,10 @@ import com.sun.net.httpserver.HttpHandler;
 import com.google.gson.Gson;
 
 public class ViewAccountInfo implements HttpHandler {
+    private Database database;
+    public ViewAccountInfo(Database database) {
+        this.database = database;
+    }
     public void handle(HttpExchange exchange) throws IOException {
         String method = exchange.getRequestMethod();
         if ("GET".equals(method)) {
@@ -18,9 +22,71 @@ public class ViewAccountInfo implements HttpHandler {
             String commaSeparated = parseQueryString(query);
             User quriedUser = new Gson().fromJson(commaSeparated, User.class);
             System.out.println("Queried ID : "+quriedUser.id+" Queried gov : "+quriedUser.government);
-            String response = "From ashraf (Account Info)";
+            Result result = database.getAccountInfo(quriedUser.id, quriedUser.government);
+            int statusNumber = 400;
+            String response = null;
+            StringBuilder sb = new StringBuilder();
+            switch(result.getMsgNum()) {
+                case 20:
+                // String[] accountInfo = accountInfoResult.getStringArray().orElse(new String[0]);
+                // System.out.println("Account Info:");
+                // System.out.println("Name: " + accountInfo[0]);
+                // System.out.println("Password: " + accountInfo[1]);
+                // System.out.println("Government: " + accountInfo[2]);
+                // System.out.println("Balance: " + accountInfo[3]);
+                String[] itemArr = result.getMultipleStrings().orElse(null);
+                sb.append("{\n");
+                sb.append("  \"user\": {\n");
+                sb.append("    \"name\": \"").append(itemArr[0]).append("\",\n");
+                sb.append("    \"password\": \"").append(itemArr[1]).append("\",\n");
+                sb.append("    \"government\": \"").append(itemArr[2]).append("\",\n");
+                sb.append("    \"balance\": \"").append(itemArr[3]).append("\"\n");
+                sb.append("  }\n");
+                System.out.println(sb.toString());
+                statusNumber = 200;
+                break;
+                case 27:
+                    response = "NO_ACCESS";
+                    statusNumber = 400;
+                break;
+            }
+            if(statusNumber == 200) {
+                Result result2 = database.getSoldItems(quriedUser.id, quriedUser.government);
+                String[] soldItems = result2.getMultipleStrings().orElse(null);
+                if(soldItems != null){
+                    sb.append("  \"sold_items\": [");
+                    for (int i = 0; i < soldItems.length; i++) {
+                        sb.append("{").append(soldItems[i]).append("}");
+                        if (i < soldItems.length - 1) sb.append(", ");
+                    }
+                    sb.append("],\n");
+                }
+                else {
+                    sb.append("  \"sold_items\": [");
+                    sb.append("EMPTY");
+                    sb.append("],\n");
+                }
+                Result result3 = database.getPurchasedItems(quriedUser.id, quriedUser.government);
+                String[] buyItems = result3.getMultipleStrings().orElse(null);
+                if(buyItems != null){
+                    sb.append("  \"purchased_items\": [");
+                    for (int i = 0; i < buyItems.length; i++) {
+                        sb.append("{").append(buyItems[i]).append("}");
+                        if (i < buyItems.length - 1) sb.append(", ");
+                    }
+                    sb.append("],\n");
+                }
+                else {
+                    sb.append("  \"purchased_items\": [");
+                    sb.append("EMPTY");
+                    sb.append("],\n");
+                }
+                sb.append("}\n");
+                System.out.println(sb.toString());
+            }
+            response = sb.toString();
             exchange.getResponseHeaders().set("Content-Type", "application/json");
-            exchange.sendResponseHeaders(200, response.getBytes().length);
+            exchange.sendResponseHeaders(statusNumber, response.length());
             OutputStream os = exchange.getResponseBody();
             os.write(response.getBytes());
             os.close();

@@ -1,7 +1,7 @@
 public class Main {
     public static void main(String[] args) {
         Database database = new Database();
-/* 
+
         // Hardcoded inputs for testing createAccount
         String username = "mohamed ashraf";
         String password = "1234567";
@@ -20,7 +20,7 @@ public class Main {
             System.out.println("Unexpected result.");
         }
  
-      
+/*  
         // Hardcoded inputs for testing login
         String loginUsername = "ahmed";
         String loginPassword = "123456";

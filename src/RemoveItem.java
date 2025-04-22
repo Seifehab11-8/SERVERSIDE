@@ -10,6 +10,10 @@ import com.sun.net.httpserver.HttpHandler;
 import com.google.gson.Gson;
 
 public class RemoveItem implements HttpHandler {
+    private Database database;
+    public RemoveItem(Database database) {
+        this.database = database;
+    }
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         String method = exchange.getRequestMethod();
@@ -35,19 +39,31 @@ public class RemoveItem implements HttpHandler {
             item.name = deleteObject.itemName;
             System.out.println("UserName : "+user.id+", UserGovernment : "+user.government+
                 ", ItemName : "+item.name);
-            int errorCode = 0;
-            String response = null;
-            /*
-             * TODO: give the code to a function created by mohamed
-             */
-            exchange.getResponseHeaders().add("Content-Type", "application/json");
-            /*
-             * TODO: give the code to a function created by ahmed essam
-             */
-            exchange.sendResponseHeaders(errorCode, 0);
-            OutputStream os = exchange.getResponseBody();
-            os.write(response.getBytes());
-            os.close();
+                int statusNumber = 400;
+                String response = null;
+                /*
+                 * TODO: give the code to a function created by mohamed
+                 */
+                Result result = database.deleteItem(user.id, user.government, item.name);
+                switch(result.getMsgNum()) {
+                    case 9:
+                    response = "ITEM_NOT_FOUND";
+                    statusNumber = 400;
+                    break;
+                    case 11:
+                        response = "SUCCESS";
+                        statusNumber = 200;
+                    break;
+                }
+                
+                exchange.getResponseHeaders().add("Content-Type", "application/json");
+                /*
+                 * TODO: give the code to a function created by ahmed essam
+                 */
+                exchange.sendResponseHeaders(statusNumber, response.length());
+                OutputStream os = exchange.getResponseBody();
+                os.write(response.getBytes());
+                os.close();
         }
         else{
             throw new UnsupportedOperationException("Unimplemented method 'handle'");

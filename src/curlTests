@@ -1,24 +1,12 @@
-curl -X POST 127.0.0.1:8080/register -d "{ \"username\": \"Bob\", \"id\": 30, \"government\": \"Cairo\", \"balance\": 10000, \"password_hash\": \"HASH:)\"}"
-curl -X POST 127.0.0.1:8080/login -d "{ \"username\": \"Bob\", \"password_hash\": \"PlainTextPassword\"}"
-curl -X POST 127.0.0.1:8080/item/add -d "{ \"name\": \"ItemName\", \"price\": 100, \"quantity\": 50, \"userid\": 30}"
-curl -X PUT 127.0.0.1:8080/item/edit -d "{ \"name\": \"ItemName\", \"quantity\": 50}"
-curl -X DELETE '127.0.0.1:8080/item/remove?id=1&government=Cairo&itemName=bottle'
+curl -X POST 127.0.0.1:8080/register -d "{ \"username\": \"abdu\", \"id\": 30, \"government\": \"Cairo\", \"balance\": 10000, \"password_hash\": \"HASH:)\"}"
+curl -X POST 127.0.0.1:8080/login -d "{ \"username\": \"Bob\", \"password_hash\": \"HASH:)\"}"
+curl -X POST "127.0.0.1:8080/item/add?id=1&government=Cairo" -d "{ \"name\": \"ItemName\", \"price\": 100, \"quantity\": 50}"
+curl -X PUT "127.0.0.1:8080/item/edit?id=1&government=Cairo" -d "{ \"item\": {\"name\": \"ItemName2\", \"price\": 10}}"
+curl -X PUT "127.0.0.1:8080/user/deposit?id=1&government=Cairo&deposit=80"
+curl -X DELETE "127.0.0.1:8080/item/remove?id=1&government=Cairo&itemName=ItemName"
 curl -X GET '127.0.0.1:8080/item/view?id=1&government=Cairo'
-curl -X GET '127.0.0.1:8080/user/view?id=1&government=Cairo'
-curl -X POST 127.0.0.1:8080/transaction/make \
--H "Content-Type: application/json" \
--d '{
-  "buyer_id": 101,
-  "buyer_government": "GovA",
-  "seller_id": 202,
-  "seller_government": "GovB",
-  "item_id": 303,
-  "item_government": "GovC",
-  "item_name": "Widget X",
-  "quantity": 10,
-  "amount": 499.99,
-  "transaction_date": "2025-04-16T12:00:00Z"
-}'
+curl -X GET "127.0.0.1:8080/user/view?id=1&government=Cairo"
+curl -X POST "http://127.0.0.1:8080/transaction/make" -H "Content-Type: application/json" -d "{\"buyer_id\": 4, \"buyer_government\": \"Cairo\", \"seller_id\": 1, \"seller_government\": \"Cairo\", \"item_id\": 2, \"item_government\": \"Cairo\", \"item_name\": \"ItemName2\", \"quantity\": 10}"
 
 
 public int id;

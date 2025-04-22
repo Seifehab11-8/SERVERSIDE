@@ -21,15 +21,15 @@ public class Server {
         server.createContext("/api/greet", new GreetHandler());
         server.createContext("/api/echo", new EchoHandler());
         server.createContext("/dyn", new DynamicHandler());
-        server.createContext("/login", new LoginHandler());
-        server.createContext("/register", new RegisterHandler());
-        server.createContext("/item/add", new addItem());
-        server.createContext("/item/edit", new EditItem());
-        server.createContext("/item/remove", new RemoveItem());
+        server.createContext("/login", new LoginHandler(new Database()));
+        server.createContext("/register", new RegisterHandler(new Database()));
+        server.createContext("/item/add", new addItem(new Database()));
+        server.createContext("/item/edit", new EditItem(new Database()));
+        server.createContext("/item/remove", new RemoveItem(new Database()));
         server.createContext("/item/view", new ViewItems());
-        server.createContext("/user/view", new ViewAccountInfo());
-        server.createContext("/user/deposit", new DepositCash());
-        server.createContext("/transaction/make", new MakeTransaction());
+        server.createContext("/user/view", new ViewAccountInfo(new Database()));
+        server.createContext("/user/deposit", new DepositCash(new Database()));
+        server.createContext("/transaction/make", new MakeTransaction(new Database()));
         //server.createContext("/json", new JSONHandler());
 	server.setExecutor(null); // creates a default executor
         server.start();

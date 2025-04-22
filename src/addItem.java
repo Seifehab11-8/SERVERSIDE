@@ -10,6 +10,10 @@ import com.sun.net.httpserver.HttpHandler;
 import com.google.gson.Gson;
 
 public class addItem implements HttpHandler {
+    private Database database;
+    public addItem(Database database) {
+        this.database = database;
+    }
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         String method = exchange.getRequestMethod();
@@ -18,14 +22,14 @@ public class addItem implements HttpHandler {
             BufferedReader bufferedReader = new BufferedReader(
                 new InputStreamReader(exchange.getRequestBody()));
             StringBuilder buildRequestBody = new StringBuilder();
-            String path = exchange.getRequestURI().getPath();  // Get the entire URL path
-            System.out.println(path);
+            // String path = exchange.getRequestURI().getPath();  // Get the entire URL path
+            // System.out.println(path);
             String query = exchange.getRequestURI().getQuery();
             System.out.println(query);
             //String dynamicPart = getDynamicPart(path);
             //System.out.println("dynamic part : "+dynamicPart); //flag
             String commaSeparated = parseQueryString(query);
-            //System.out.println("comma separated part : "+commaSeparated);
+            System.out.println("comma separated part : "+commaSeparated);
             User quriedUser = new Gson().fromJson(commaSeparated, User.class);
             System.out.println("Queried ID : "+quriedUser.id+" Queried gov : "+quriedUser.government);
             String line = null;
@@ -38,16 +42,35 @@ public class addItem implements HttpHandler {
             System.out.println("addItem : got \""+requestBody+"\"");
             System.out.println(item.name+","+item.user_id+","+item.price+","+item.quantity);
             //------------end of debug--------------
-            int errorCode = 0;
+            int statusNumber = 400;
             String response = null;
             /*
              * TODO: give the code to a function created by mohamed
              */
+            Result result = database.addItem(quriedUser.id, quriedUser.government, item.name, item.price, item.quantity);
+            switch(result.getMsgNum()) {
+                case 5:
+                    response = "SUCCESS";
+                    statusNumber = 200;
+                break;
+                case 6:
+                    response = "PRICE_ERROR";
+                    statusNumber = 400;
+                break;
+                case 7:
+                    response = "QUANTITY_ERROR";
+                    statusNumber = 400;
+                break;
+                case 8:
+                    response = "NAME_DUPLICATION";
+                    statusNumber = 400;
+                break;
+            }
             exchange.getResponseHeaders().add("Content-Type", "application/json");
             /*
              * TODO: give the code to a function created by ahmed essam
              */
-            exchange.sendResponseHeaders(errorCode, 0);
+            exchange.sendResponseHeaders(statusNumber, response.length());
             OutputStream os = exchange.getResponseBody();
             os.write(response.getBytes());
             os.close();

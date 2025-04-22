@@ -3,5 +3,6 @@ public class User {
     public String government;
     public String username;
     public String password_hash;
-    public String balanace;
+    public int balance;
 }
+

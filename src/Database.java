@@ -28,8 +28,16 @@ public class Database {
         String loginResult = userService.login(username, password); // Call UserService's login method
         if (loginResult != null) {
             String[] parts = loginResult.split(","); // Split the result into id, government, and msg_num
-            String formattedResult = "user id: " + parts[0] + ", user government: " + parts[1]; // Format the result
+            String formattedResult = "id: " + parts[0] + ", government: " + parts[1]; // Format the result
             int msgNum = Integer.parseInt(parts[2]); // Extract msg_num
+            /*
+             * debug
+             */
+            System.out.println("msg_num: " + msgNum); // Print msg_num for debugging
+            System.out.println("formattedResult: " + formattedResult); // Print formatted result for debugging
+            /*
+             * debug
+             */
             return new Result(formattedResult, msgNum); // Return the formatted result
         }
     
