@@ -26,10 +26,12 @@ public class Server {
         server.createContext("/item/add", new addItem(new Database()));
         server.createContext("/item/edit", new EditItem(new Database()));
         server.createContext("/item/remove", new RemoveItem(new Database()));
-        server.createContext("/item/view", new ViewItems());
+        server.createContext("/item/view", new ViewItems(new Database()));
         server.createContext("/user/view", new ViewAccountInfo(new Database()));
         server.createContext("/user/deposit", new DepositCash(new Database()));
         server.createContext("/transaction/make", new MakeTransaction(new Database()));
+        server.createContext("/item/getMyItems", new GetMyItemsHandler(new Database()));
+        server.createContext("/item/viewSystemTransactions", new ViewSystemTransactions(new Database()));
         //server.createContext("/json", new JSONHandler());
 	server.setExecutor(null); // creates a default executor
         server.start();

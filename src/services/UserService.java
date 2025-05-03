@@ -27,6 +27,7 @@ public class UserService {
             stmt.executeUpdate();
             return 1; // Return 1 if the account is created successfully
         } catch (SQLException e) {
+            System.err.println("SQL error: " + e.getMessage()); // Log the error message
             return 2; // Return 2 if there is an error during account creation
         }
     }

@@ -41,7 +41,7 @@ public class RegisterHandler implements HttpHandler {
             
             String response = null;
             if(errorCode == 1) {
-                response = new Gson().toJson(user).toString();
+                response = "SUCCESS";
                 statusNumber = 200;
             }
             else {

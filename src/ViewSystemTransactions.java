@@ -9,9 +9,9 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.google.gson.Gson;
 
-public class ViewItems implements HttpHandler {
+public class ViewSystemTransactions implements HttpHandler {
     private Database database;
-    public ViewItems(Database database) {
+    public ViewSystemTransactions(Database database) {
         this.database = database;
     }
     public void handle(HttpExchange exchange) throws IOException {
@@ -22,16 +22,16 @@ public class ViewItems implements HttpHandler {
             String commaSeparated = parseQueryString(query);
             User quriedUser = new Gson().fromJson(commaSeparated, User.class);
             System.out.println("Queried ID : "+quriedUser.id+" Queried gov : "+quriedUser.government);
-            Result result = database.viewItemsForSale(quriedUser.id, quriedUser.government);
+            Result result = database.viewSystemTransactions(quriedUser.id, quriedUser.government);
             int statusNumber = 400;
             String response = null;
             switch(result.getMsgNum()) {
-                case 14:
+                case 28:
                     statusNumber = 200;
                     String[] itemArr = result.getMultipleStrings().orElse(null);
                     StringBuilder sb = new StringBuilder();
                     sb.append("{\n");
-                    sb.append("  \"items\": [\n");
+                    sb.append("  \"transactions\": [\n");
                     for (int i = 0; i < itemArr.length; i++) {
                         sb.append("    {").append(itemArr[i]).append("}");
                         if (i < itemArr.length - 1) sb.append(",\n");
@@ -41,10 +41,12 @@ public class ViewItems implements HttpHandler {
                     System.out.println(sb.toString());
                     response = sb.toString();
                     break;
-                case 15:
-                    response = "ERROR";
+                case 27:
+                    response = "NO ACCESS";
                     break;
-
+                case 29:
+                    response = "NO TRANSACTIONS";
+                    break;
             }
             exchange.getResponseHeaders().set("Content-Type", "application/json");
             exchange.sendResponseHeaders(statusNumber, response.getBytes().length);

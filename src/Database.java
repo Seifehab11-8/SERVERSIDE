@@ -16,19 +16,23 @@ public class Database {
     public Result createAccount(String username, String password, String government, int balance) {
         // Map government input to gov1 or gov2
         String mappedGovernment = "Cairo".equalsIgnoreCase(government) ? "gov1" : "gov2";
+        System.out.println("Mapped government: " + mappedGovernment); // Debugging line
+        System.out.println("Government: " + government); // Debugging line
         int temp = userService.createAccount(username, password, balance, mappedGovernment,government);
         return new Result((String) null, temp); // msg_num 1 indicates success, 2 indicates failure
     }
  
     public Result login(String username, String password) {
         if ("admin".equals(username) && "admin".equals(password)) {
-            return new Result("user id: -1, user government: no_gov", 3); // Admin login
+            return new Result("id: -1, government: no_gov", 3); // Admin login
         }
     
         String loginResult = userService.login(username, password); // Call UserService's login method
         if (loginResult != null) {
             String[] parts = loginResult.split(","); // Split the result into id, government, and msg_num
-            String formattedResult = "id: " + parts[0] + ", government: " + parts[1]; // Format the result
+            //if parts[2] = gov1 return Cairo else return Other
+            String government = "gov1".equals(parts[1]) ? "Cairo" : "Other"; // Map gov1 to Cairo and gov2 to Other
+            String formattedResult = "id: " + parts[0] + ", government: " + government; // Format the result
             int msgNum = Integer.parseInt(parts[2]); // Extract msg_num
             /*
              * debug

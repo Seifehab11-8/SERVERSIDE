@@ -1,13 +1,31 @@
-curl -X POST 127.0.0.1:8080/register -d "{ \"username\": \"abdu\", \"id\": 30, \"government\": \"Cairo\", \"balance\": 10000, \"password_hash\": \"HASH:)\"}"
-curl -X POST 127.0.0.1:8080/login -d "{ \"username\": \"Bob\", \"password_hash\": \"HASH:)\"}"
-curl -X POST "127.0.0.1:8080/item/add?id=1&government=Cairo" -d "{ \"name\": \"ItemName\", \"price\": 100, \"quantity\": 50}"
+curl -X POST 127.0.0.1:8080/register -d "{ \"username\": \"admin\", \"government\": \"Alexendaria\", \"balance\": 1500, \"password_hash\": \"admin\"}"
+curl -X POST 127.0.0.1:8080/login -d "{ \"username\": \"adn354763254456\", \"password_hash\": \"admin\"}"
+curl -X POST "127.0.0.1:8080/item/add?id=4&government=Other" -d "{ \"name\": \"ItemName2323445\", \"price\": 100, \"quantity\": 50}"
 curl -X PUT "127.0.0.1:8080/item/edit?id=1&government=Cairo" -d "{ \"item\": {\"name\": \"ItemName2\", \"price\": 10}}"
 curl -X PUT "127.0.0.1:8080/user/deposit?id=1&government=Cairo&deposit=80"
 curl -X DELETE "127.0.0.1:8080/item/remove?id=1&government=Cairo&itemName=ItemName"
-curl -X GET '127.0.0.1:8080/item/view?id=1&government=Cairo'
 curl -X GET "127.0.0.1:8080/user/view?id=1&government=Cairo"
 curl -X POST "http://127.0.0.1:8080/transaction/make" -H "Content-Type: application/json" -d "{\"buyer_id\": 4, \"buyer_government\": \"Cairo\", \"seller_id\": 1, \"seller_government\": \"Cairo\", \"item_id\": 2, \"item_government\": \"Cairo\", \"item_name\": \"ItemName2\", \"quantity\": 10}"
 
+curl -X GET "127.0.0.1:8080/item/view?id=3&government=Cairo"
+curl -X GET "127.0.0.1:8080/item/getMyItems?id=4&government=Cairo"
+curl -X GET "127.0.0.1:8080/item/viewSystemTransactions?id=-1&government=no_gov"
+// {
+//     "items": [
+//       {Item ID: 2, Name: ItemName2, Price: 10.0, Quantity: 20, Seller: mohamed ashraf, Government: cairo},
+//       {Item ID: 4, Name: ItemName234, Price: 100.0, Quantity: 50, Seller: mohamed ashraf, Government: cairo}
+//     ]
+// }
+
+C:\Users\semaz>curl -X GET "127.0.0.1:8080/item/viewSystemTransactions?id=-1&government=no_gov"
+{
+  "items": [
+    {Transaction ID: 1, Item: ItemName2, Quantity: 10, Amount: 100.0, Date: 2025-04-22 22:44:38.0, Buyer: mohamedashraf11, Buyer government: Cairo, Seller: mohamed ashraf, Seller government: Cairo},
+    {Transaction ID: 2, Item: ItemName2, Quantity: 10, Amount: 100.0, Date: 2025-04-22 23:27:18.0, Buyer: mohamedashraf11, Buyer government: Cairo, Seller: mohamed ashraf, Seller government: Cairo},
+    {Transaction ID: 3, Item: ItemName2, Quantity: 10, Amount: 100.0, Date: 2025-05-01 22:33:57.0, Buyer: mohamedashraf11, Buyer government: Cairo, Seller: mohamed ashraf, Seller government: Cairo}
+  ]
+}
+  
 
 public int id;
     public String government;

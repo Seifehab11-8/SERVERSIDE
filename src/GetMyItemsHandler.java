@@ -9,9 +9,9 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.google.gson.Gson;
 
-public class ViewItems implements HttpHandler {
+public class GetMyItemsHandler implements HttpHandler {
     private Database database;
-    public ViewItems(Database database) {
+    public GetMyItemsHandler(Database database) {
         this.database = database;
     }
     public void handle(HttpExchange exchange) throws IOException {
@@ -22,11 +22,11 @@ public class ViewItems implements HttpHandler {
             String commaSeparated = parseQueryString(query);
             User quriedUser = new Gson().fromJson(commaSeparated, User.class);
             System.out.println("Queried ID : "+quriedUser.id+" Queried gov : "+quriedUser.government);
-            Result result = database.viewItemsForSale(quriedUser.id, quriedUser.government);
+            Result result = database.getMyItems(quriedUser.id, quriedUser.government);
             int statusNumber = 400;
             String response = null;
             switch(result.getMsgNum()) {
-                case 14:
+                case 25:
                     statusNumber = 200;
                     String[] itemArr = result.getMultipleStrings().orElse(null);
                     StringBuilder sb = new StringBuilder();
@@ -41,7 +41,7 @@ public class ViewItems implements HttpHandler {
                     System.out.println(sb.toString());
                     response = sb.toString();
                     break;
-                case 15:
+                case 26:
                     response = "ERROR";
                     break;
 
