@@ -40,7 +40,6 @@ public class RegisterHandler implements HttpHandler {
             int statusNumber = 400;
             
             String response = null;
-<<<<<<< HEAD
             if (errorCode == 1) {
                 response = "{\"message\": \"SUCCESS\"}";
                 statusNumber = 200;
@@ -48,15 +47,6 @@ public class RegisterHandler implements HttpHandler {
                 response = "{\"message\": \"FAIL\"}";
             }
             
-=======
-            if(errorCode == 1) {
-                response = new Gson().toJson(user).toString();
-                statusNumber = 200;
-            }
-            else {
-                response = "FAIL";
-            }
->>>>>>> dc5d364d8f41c8be70e627537adacbfa511f0fd0
             exchange.getResponseHeaders().add("Content-Type", "application/json");
             
             exchange.sendResponseHeaders(statusNumber, response.length());
