@@ -46,9 +46,9 @@ public class ViewAccountInfo implements HttpHandler {
                 statusNumber = 200;
                 break;
                 case 27:
-                    response = "NO_ACCESS";
+                    response = "{\"message\": \"NO_ACCESS\"}";
                     statusNumber = 400;
-                break;
+                    break;
             }
             if(statusNumber == 200) {
                 Result result2 = database.getSoldItems(quriedUser.id, quriedUser.government);
@@ -63,7 +63,6 @@ public class ViewAccountInfo implements HttpHandler {
                 }
                 else {
                     sb.append("  \"sold_items\": [");
-                    sb.append("EMPTY");
                     sb.append("],\n");
                 }
                 Result result3 = database.getPurchasedItems(quriedUser.id, quriedUser.government);
@@ -78,7 +77,6 @@ public class ViewAccountInfo implements HttpHandler {
                 }
                 else {
                     sb.append("  \"purchased_items\": [");
-                    sb.append("EMPTY");
                     sb.append("],\n");
                 }
                 sb.append("}\n");

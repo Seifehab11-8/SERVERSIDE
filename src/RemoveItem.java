@@ -47,14 +47,15 @@ public class RemoveItem implements HttpHandler {
                 Result result = database.deleteItem(user.id, user.government, item.name);
                 switch(result.getMsgNum()) {
                     case 9:
-                    response = "ITEM_NOT_FOUND";
-                    statusNumber = 400;
-                    break;
+                        response = "{\"message\": \"ITEM_NOT_FOUND\"}";
+                        statusNumber = 400;
+                        break;
                     case 11:
-                        response = "SUCCESS";
+                        response = "{\"message\": \"SUCCESS\"}";
                         statusNumber = 200;
-                    break;
+                        break;
                 }
+                
                 
                 exchange.getResponseHeaders().add("Content-Type", "application/json");
                 /*

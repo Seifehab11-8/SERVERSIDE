@@ -43,8 +43,9 @@ public class LoginHandler implements HttpHandler{
                 System.out.println("user id: "+user.id+" user government: "+user.government);
                 statusNumber = 200;
             } else if (errorCode == 4) {
-                response = "FAIL"; // Login failed
+                response = "{\"message\": \"FAIL\"}"; // Login failed
             }
+            
             
             /*
              * TODO: give the code to a function created by mohamed

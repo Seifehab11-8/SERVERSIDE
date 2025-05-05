@@ -50,22 +50,23 @@ public class MakeTransaction implements HttpHandler {
             Result result = database.buyItems(t.buyer_id, t.buyer_government, t.item_id, t.seller_government, t.quantity);
             switch(result.getMsgNum()) {
                 case 16:
-                response = "TRANSACTION_SUCCESS";
-                statusNumber = 200;
-                break;
+                    response = "{\"message\": \"TRANSACTION_SUCCESS\"}";
+                    statusNumber = 200;
+                    break;
                 case 17:
-                    response = "NOT_ENOUGH_QUANTITY";
+                    response = "{\"message\": \"NOT_ENOUGH_QUANTITY\"}";
                     statusNumber = 400;
-                break;
+                    break;
                 case 18:
-                response = "INSUFFICENT_BALANCE";
-                statusNumber = 400;
-                break;
+                    response = "{\"message\": \"INSUFFICENT_BALANCE\"}";
+                    statusNumber = 400;
+                    break;
                 case 19:
-                response = "ITEM_NOT_EXIST";
-                statusNumber = 400;
-                break;
+                    response = "{\"message\": \"ITEM_NOT_EXIST\"}";
+                    statusNumber = 400;
+                    break;
             }
+            
             /*
              * TODO: give the code to a function created by mohamed
              */

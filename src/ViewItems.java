@@ -42,9 +42,8 @@ public class ViewItems implements HttpHandler {
                     response = sb.toString();
                     break;
                 case 15:
-                    response = "ERROR";
+                    response = "{\"message\": \"ERROR\"}";
                     break;
-
             }
             exchange.getResponseHeaders().set("Content-Type", "application/json");
             exchange.sendResponseHeaders(statusNumber, response.getBytes().length);

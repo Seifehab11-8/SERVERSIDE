@@ -55,14 +55,15 @@ public class EditItem implements HttpHandler {
 
             switch(result.getMsgNum()) {
                 case 9:
-                response = "ITEM_NOT_FOUND";
-                statusNumber = 400;
-                break;
+                    response = "{\"message\": \"ITEM_NOT_FOUND\"}";
+                    statusNumber = 400;
+                    break;
                 case 10:
-                    response = "SUCCESS";
+                    response = "{\"message\": \"SUCCESS\"}";
                     statusNumber = 200;
-                break;
+                    break;
             }
+                
             exchange.getResponseHeaders().add("Content-Type", "application/json");
             /*
              * TODO: give the code to a function created by ahmed essam

@@ -29,6 +29,10 @@ public class ViewSystemTransactions implements HttpHandler {
                 case 28:
                     statusNumber = 200;
                     String[] itemArr = result.getMultipleStrings().orElse(null);
+                    if(itemArr == null) {
+                        response = "{\"message\": \"NO TRANSACTIONS\"}";
+                        break;
+                    }
                     StringBuilder sb = new StringBuilder();
                     sb.append("{\n");
                     sb.append("  \"transactions\": [\n");
@@ -42,10 +46,10 @@ public class ViewSystemTransactions implements HttpHandler {
                     response = sb.toString();
                     break;
                 case 27:
-                    response = "NO ACCESS";
+                    response = "{\"message\": \"NO ACCESS\"}";
                     break;
                 case 29:
-                    response = "NO TRANSACTIONS";
+                    response = "{\"message\": \"NO TRANSACTIONS\"}";
                     break;
             }
             exchange.getResponseHeaders().set("Content-Type", "application/json");

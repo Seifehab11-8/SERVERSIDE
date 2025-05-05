@@ -50,21 +50,21 @@ public class addItem implements HttpHandler {
             Result result = database.addItem(quriedUser.id, quriedUser.government, item.name, item.price, item.quantity);
             switch(result.getMsgNum()) {
                 case 5:
-                    response = "SUCCESS";
+                    response = "{\"message\": \"SUCCESS\"}";
                     statusNumber = 200;
-                break;
+                    break;
                 case 6:
-                    response = "PRICE_ERROR";
+                    response = "{\"message\": \"PRICE_ERROR\"}";
                     statusNumber = 400;
-                break;
+                    break;
                 case 7:
-                    response = "QUANTITY_ERROR";
+                    response = "{\"message\": \"QUANTITY_ERROR\"}";
                     statusNumber = 400;
-                break;
+                    break;
                 case 8:
-                    response = "NAME_DUPLICATION";
+                    response = "{\"message\": \"NAME_DUPLICATION\"}";
                     statusNumber = 400;
-                break;
+                    break;
             }
             exchange.getResponseHeaders().add("Content-Type", "application/json");
             /*

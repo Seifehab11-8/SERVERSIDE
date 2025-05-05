@@ -30,6 +30,14 @@ public class GetMyItemsHandler implements HttpHandler {
                     statusNumber = 200;
                     String[] itemArr = result.getMultipleStrings().orElse(null);
                     StringBuilder sb = new StringBuilder();
+                    if(itemArr == null) {
+                        sb.append("{\n");
+                        sb.append("  \"items\": []\n");
+                        sb.append("}\n");
+                        System.out.println(sb.toString());
+                        response = sb.toString();
+                        break;
+                    }
                     sb.append("{\n");
                     sb.append("  \"items\": [\n");
                     for (int i = 0; i < itemArr.length; i++) {
@@ -42,8 +50,9 @@ public class GetMyItemsHandler implements HttpHandler {
                     response = sb.toString();
                     break;
                 case 26:
-                    response = "ERROR";
+                    response = "{\"message\": \"ERROR\"}";
                     break;
+                
 
             }
             exchange.getResponseHeaders().set("Content-Type", "application/json");

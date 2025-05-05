@@ -40,13 +40,13 @@ public class RegisterHandler implements HttpHandler {
             int statusNumber = 400;
             
             String response = null;
-            if(errorCode == 1) {
-                response = "SUCCESS";
+            if (errorCode == 1) {
+                response = "{\"message\": \"SUCCESS\"}";
                 statusNumber = 200;
+            } else {
+                response = "{\"message\": \"FAIL\"}";
             }
-            else {
-                response = "FAIL";
-            }
+            
             exchange.getResponseHeaders().add("Content-Type", "application/json");
             
             exchange.sendResponseHeaders(statusNumber, response.length());

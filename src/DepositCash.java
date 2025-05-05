@@ -33,14 +33,15 @@ public class DepositCash implements HttpHandler {
              */
             switch(result.getMsgNum()) {
                 case 12:
-                response = "NEGATIVE_DEPOSIT_EXCEPTION";
-                statusNumber = 400;
-                break;
+                    response = "{\"message\": \"NEGATIVE_DEPOSIT_EXCEPTION\"}";
+                    statusNumber = 400;
+                    break;
                 case 13:
-                    response = "DEPOSIT_SUCCESS";
+                    response = "{\"message\": \"DEPOSIT_SUCCESS\"}";
                     statusNumber = 200;
-                break;
+                    break;
             }
+            
             exchange.getResponseHeaders().set("Content-Type", "application/json");
             exchange.sendResponseHeaders(statusNumber, response.getBytes().length);
             OutputStream os = exchange.getResponseBody();
